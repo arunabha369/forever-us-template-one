@@ -26,16 +26,33 @@ export default function OpeningScene({ onStart, title, subtitle }: OpeningSceneP
         <section className="relative h-screen w-full flex flex-col items-center justify-center overflow-hidden">
             {/* Background Layer with Reveal Effect */}
             <div className="absolute inset-0 z-0">
-                <Image
-                    src="/images/hero.png"
-                    alt="Our Story"
-                    fill
-                    className="object-cover transition-all duration-[2000ms] ease-in-out scale-105"
-                    style={{
-                        filter: isRevealed ? "blur(0px) brightness(1)" : "blur(12px) brightness(0.6)"
-                    }}
-                    priority
-                />
+                {/* Desktop Image */}
+                <div className="hidden md:block w-full h-full relative">
+                    <Image
+                        src="/images/hero.png"
+                        alt="Our Story"
+                        fill
+                        className="object-cover transition-all duration-[2000ms] ease-in-out scale-105"
+                        style={{
+                            filter: isRevealed ? "blur(0px) brightness(1)" : "blur(12px) brightness(0.6)"
+                        }}
+                        priority
+                    />
+                </div>
+
+                {/* Mobile Image */}
+                <div className="block md:hidden w-full h-full relative">
+                    <Image
+                        src="/images/hero-mobile.png"
+                        alt="Our Story"
+                        fill
+                        className="object-cover transition-all duration-[2000ms] ease-in-out scale-105"
+                        style={{
+                            filter: isRevealed ? "blur(0px) brightness(1)" : "blur(12px) brightness(0.6)"
+                        }}
+                        priority
+                    />
+                </div>
                 <div className="absolute inset-0 bg-black/30 mix-blend-overlay" />
             </div>
 
