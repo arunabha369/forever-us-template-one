@@ -9,26 +9,26 @@ interface SoundControllerProps {
 }
 
 export default function SoundController({ allowAutoPlay = false }: SoundControllerProps) {
-    const audioRef = useRef<HTMLAudioElement | null>(null);
+    const audioRef = useRef<HTMLAudioElement>(null);
     const [isPlaying, setIsPlaying] = useState(false);
     const [hasInteracted, setHasInteracted] = useState(false);
 
     useEffect(() => {
-        // Create audio element
-        const audio = new Audio("/audio/background-music.mp3");
-        audio.loop = true;
-        audio.volume = 0.4;
-        audioRef.current = audio;
+        // Attempt auto-play when allowed
+        if (allowAutoPlay && !isPlaying && !hasInteracted && audioRef.current) {
+            const playPromise = audioRef.current.play();
 
-        return () => {
-            audio.pause();
-            audioRef.current = null;
-        };
-    }, []);
-
-    useEffect(() => {
-        if (allowAutoPlay && !isPlaying && !hasInteracted) {
-            handleToggle();
+            if (playPromise !== undefined) {
+                playPromise
+                    .then(() => {
+                        setIsPlaying(true);
+                        setHasInteracted(true);
+                    })
+                    .catch(error => {
+                        console.log("Auto-play prevented by browser policy:", error);
+                        // User interaction will be required
+                    });
+            }
         }
     }, [allowAutoPlay]);
 
@@ -37,17 +37,23 @@ export default function SoundController({ allowAutoPlay = false }: SoundControll
 
         if (isPlaying) {
             audioRef.current.pause();
+            setIsPlaying(false);
         } else {
-            audioRef.current.play().catch((e) => {
-                console.log("Audio play failed (waiting for interaction):", e);
-            });
+            audioRef.current.play().catch((e) => console.error("Play failed:", e));
+            setIsPlaying(true);
             setHasInteracted(true);
         }
-        setIsPlaying(!isPlaying);
     };
 
     return (
         <div className="fixed bottom-8 right-8 z-50">
+            <audio
+                ref={audioRef}
+                src="/audio/background-music.mp3"
+                loop
+                preload="auto"
+            />
+
             <motion.button
                 className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-white/10 backdrop-blur-md transition-all hover:scale-105 hover:bg-white/20 border border-white/20"
                 onClick={handleToggle}
