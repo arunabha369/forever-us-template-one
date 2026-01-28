@@ -37,6 +37,7 @@ export default function OpeningScene({ onStart, title, subtitle }: OpeningSceneP
                             filter: isRevealed ? "blur(0px) brightness(1)" : "blur(12px) brightness(0.6)"
                         }}
                         priority
+                        sizes="100vw"
                     />
                 </div>
 
@@ -51,6 +52,7 @@ export default function OpeningScene({ onStart, title, subtitle }: OpeningSceneP
                             filter: isRevealed ? "blur(0px) brightness(1)" : "blur(12px) brightness(0.6)"
                         }}
                         priority
+                        sizes="100vw"
                     />
                 </div>
                 <div className="absolute inset-0 bg-black/30 mix-blend-overlay" />
