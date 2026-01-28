@@ -9,6 +9,7 @@ interface TimelineEvent {
     title: string;
     description: string;
     image?: string;
+    mobileImage?: string;
 }
 
 interface Chapter2Props {
@@ -19,15 +20,25 @@ interface Chapter2Props {
 export default function Chapter2({ title, events }: Chapter2Props) {
     const containerRef = useRef<HTMLDivElement>(null);
     const [activeImage, setActiveImage] = useState("/images/travel.png");
+    const [activeMobileImage, setActiveMobileImage] = useState("/images/trip-mobile.png");
 
-    // Enhanced event data with specific images
+    // Enhanced event data with specific images for both desktop and mobile
     const enhancedEvents = events.map((event, i) => ({
         ...event,
         image: i === 0 ? "/images/first-date.png" :
             i === 1 ? "/images/trip.png" :
                 i === 2 ? "/images/stars.png" :
-                    "/images/travel.png"
+                    "/images/travel.png",
+        mobileImage: i === 0 ? "/images/first-date-mobile.png" :
+            i === 1 ? "/images/trip-mobile.png" :
+                i === 2 ? "/images/stars-mobile.png" :
+                    "/images/trip-mobile.png"
     }));
+
+    const handleActive = (event: TimelineEvent) => {
+        if (event.image) setActiveImage(event.image);
+        if (event.mobileImage) setActiveMobileImage(event.mobileImage);
+    }
 
     return (
         <section ref={containerRef} className="relative bg-zinc-50 dark:bg-black/80">
@@ -36,19 +47,37 @@ export default function Chapter2({ title, events }: Chapter2Props) {
                 {/* Sticky Visual Side */}
                 <div className="lg:w-1/2 h-[50vh] lg:h-screen sticky top-0 overflow-hidden z-0">
                     <div className="relative w-full h-full">
-                        {/* Image Switcher */}
-                        {enhancedEvents.map((event, i) => (
-                            <Image
-                                key={i}
-                                src={event.image || "/images/travel.png"}
-                                alt={event.title}
-                                fill
-                                className={`object-cover transition-opacity duration-1000 ${activeImage === event.image ? "opacity-100 scale-105" : "opacity-0 scale-100"
-                                    }`}
-                                priority={i === 0}
-                                sizes="(max-width: 1024px) 100vw, 50vw"
-                            />
-                        ))}
+                        {/* Image Switcher Desktop */}
+                        <div className="hidden lg:block w-full h-full relative">
+                            {enhancedEvents.map((event, i) => (
+                                <Image
+                                    key={`desktop-${i}`}
+                                    src={event.image || "/images/travel.png"}
+                                    alt={event.title}
+                                    fill
+                                    className={`object-cover transition-opacity duration-1000 ${activeImage === event.image ? "opacity-100 scale-105" : "opacity-0 scale-100"
+                                        }`}
+                                    priority={i === 0}
+                                    sizes="50vw"
+                                />
+                            ))}
+                        </div>
+
+                        {/* Image Switcher Mobile */}
+                        <div className="block lg:hidden w-full h-full relative">
+                            {enhancedEvents.map((event, i) => (
+                                <Image
+                                    key={`mobile-${i}`}
+                                    src={event.mobileImage || "/images/trip-mobile.png"}
+                                    alt={event.title}
+                                    fill
+                                    className={`object-cover transition-opacity duration-1000 ${activeMobileImage === event.mobileImage ? "opacity-100 scale-105" : "opacity-0 scale-100"
+                                        }`}
+                                    priority={i === 0}
+                                    sizes="100vw"
+                                />
+                            ))}
+                        </div>
 
                         {/* Rain/Cinematic Overlay Effect */}
                         <div className="absolute inset-0 opacity-20 bg-[url('https://upload.wikimedia.org/wikipedia/commons/8/82/Rain_drops_on_window_02.jpg')] bg-cover mix-blend-overlay pointer-events-none" />
@@ -77,7 +106,7 @@ export default function Chapter2({ title, events }: Chapter2Props) {
                                 key={index}
                                 event={event}
                                 index={index}
-                                onActive={() => setActiveImage(event.image || "/images/travel.png")}
+                                onActive={() => handleActive(event)}
                             />
                         ))}
 

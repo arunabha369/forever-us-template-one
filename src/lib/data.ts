@@ -1,7 +1,7 @@
 export const STORY_DATA = {
     coupleNames: {
-        partner1: "Alex",
-        partner2: "Sarah"
+        partner1: "Rohit",
+        partner2: "Sara"
     },
     opening: {
         title: "Our Story",
@@ -13,7 +13,7 @@ export const STORY_DATA = {
         subtitle: "It started with a simple hello.",
         text: "It was a rainy Tuesday at the downtown coffee shop. Neither of us had an umbrella, but we found shelter under the same awning. A shared laugh about the weather turned into a conversation that lasted hours.",
         image: "/images/how-we-met.jpg",
-        location: "Cafe Luni, New York"
+        location: "Kolkata, West Bengal"
     },
     chapter2: {
         title: "Falling in Love",
