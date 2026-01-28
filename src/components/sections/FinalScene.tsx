@@ -10,6 +10,9 @@ interface FinalSceneProps {
 export default function FinalScene({ text }: FinalSceneProps) {
     const handleReplay = () => {
         window.scrollTo({ top: 0, behavior: "smooth" });
+        setTimeout(() => {
+            window.location.reload();
+        }, 800);
     };
 
     return (
